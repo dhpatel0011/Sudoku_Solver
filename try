@@ -46,3 +46,5 @@ import numpy as np
 
 #print(X)
 
+            # for i in range(8):
+            #     pg.hotkey('left')

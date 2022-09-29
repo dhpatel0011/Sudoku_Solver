@@ -2,7 +2,7 @@ import pyautogui as pg
 import numpy as np
 import time
 
-n = []
+grid = []
 
 while True:
     row = list(input('Row: '))
@@ -10,28 +10,28 @@ while True:
 
     for n in row:
         ints.append(int(n))
-    n.append(ints)
+    grid.append(ints)
 
-    if len(n) == 9:
+    if len(grid) == 9:
         break
-    print('Row ' + str(len(n)) + ' Complete')
+    print('Row ' + str(len(grid)) + ' Complete')
 
 time.sleep(1)
 
 def possible(x, y, n):
     for i in range(0, 9):
-        if n[i][x] == n and i != y: # Checks for number (n) in X columns
+        if grid[i][x] == n and i != y: # Checks for number (n) in X columns
             return False
 
     for i in range(0, 9):
-        if n[y][i] == n and i != x: # Checks for number (n) in X columns
+        if grid[y][i] == n and i != x: # Checks for number (n) in X columns
             return False
 
     x0 = (x // 3) * 3
     y0 = (y // 3) * 3
     for X in range(x0, x0 + 3):
         for Y in range(y0, y0 + 3):  # Checks for numbers in box(no matter the position, it finds the corner)
-            if n[Y][X] == n:
+            if grid[Y][X] == n:
                 return False    
     return True
 
@@ -55,21 +55,19 @@ def Print(matrix):
             pg.hotkey('down')
             for i in range(8):
                 pg.hotkey('left')
-            
-
 
 def solve():
-    global n
+    global grid
     for y in range(9):
         for x in range(9):
-            if n[y][x] == 0:
+            if grid[y][x] == 0:
                 for n in range(1, 10):
                     if possible(x, y, n):
-                        n[y][x] = n
+                        grid[y][x] = n
                         solve()
-                        n[y][x] = 0
+                        grid[y][x] = 0
                 return
-    Print(n)
+    Print(grid)
     input("More?")
 
 solve()
