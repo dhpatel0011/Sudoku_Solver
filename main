@@ -1,0 +1,75 @@
+import pyautogui as pg 
+import numpy as np
+import time
+
+n = []
+
+while True:
+    row = list(input('Row: '))
+    ints = []
+
+    for n in row:
+        ints.append(int(n))
+    n.append(ints)
+
+    if len(n) == 9:
+        break
+    print('Row ' + str(len(n)) + ' Complete')
+
+time.sleep(1)
+
+def possible(x, y, n):
+    for i in range(0, 9):
+        if n[i][x] == n and i != y: # Checks for number (n) in X columns
+            return False
+
+    for i in range(0, 9):
+        if n[y][i] == n and i != x: # Checks for number (n) in X columns
+            return False
+
+    x0 = (x // 3) * 3
+    y0 = (y // 3) * 3
+    for X in range(x0, x0 + 3):
+        for Y in range(y0, y0 + 3):  # Checks for numbers in box(no matter the position, it finds the corner)
+            if n[Y][X] == n:
+                return False    
+    return True
+
+def Print(matrix):
+    final = []
+    str_fin = []
+    for i in range(9):
+        final.append(matrix[i])
+
+    for lists in final:
+        for num in lists:
+            str_fin.append(str(num))
+
+    counter = []
+
+    for num in str_fin:
+        pg.press(num)
+        pg.hotkey('right')
+        counter.append(num)
+        if len(counter)%9 == 0:
+            pg.hotkey('down')
+            for i in range(8):
+                pg.hotkey('left')
+            
+
+
+def solve():
+    global n
+    for y in range(9):
+        for x in range(9):
+            if n[y][x] == 0:
+                for n in range(1, 10):
+                    if possible(x, y, n):
+                        n[y][x] = n
+                        solve()
+                        n[y][x] = 0
+                return
+    Print(n)
+    input("More?")
+
+solve()
